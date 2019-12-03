@@ -6,7 +6,6 @@ public class Ball_Behavior : MonoBehaviour
 {
     [SerializeField]
     public float speed;
-
     public float radius;
     public Vector2 direction;
 
@@ -22,11 +21,13 @@ public class Ball_Behavior : MonoBehaviour
     UI_FollowObject uiBar;
     public Controller controller;
 
+    //Boys
+    public GameObject boysPrefab;
+    public string parent;
+
     void Start()
     {
-        //direction = Vector2.one.normalized;
         direction = new Vector2(Random.value, Random.value);
-
         radius = transform.localScale.x / 2;
         print("direction: " + direction + " radius: " + radius);
 
@@ -38,7 +39,6 @@ public class Ball_Behavior : MonoBehaviour
         controller = GameObject.Find("Controller").GetComponent<Controller>();
     }
 
-    // Update is called once per frame
     void Update()
     {
         transform.Translate(direction * speed * Time.deltaTime);
@@ -71,8 +71,7 @@ public class Ball_Behavior : MonoBehaviour
         if (other.tag == "Ball")
         {
             direction.y = -direction.y;
-            direction.x = -direction.x;
-            
+            direction.x = -direction.x; 
         }
     }
     public void Damage()
@@ -80,22 +79,33 @@ public class Ball_Behavior : MonoBehaviour
         hp = hp - damage;
         if (hp > 0.1)
         {
-            animator.SetTrigger("Collider");
-            uiBar.BarLife(hp);
+            animator.SetTrigger("Collider"); //Animação de Colisão
+            uiBar.BarLife(hp); // Atualização do Status da Barra de HP
         }
         if (hp <= 0.0f)
         {
-
-            StartCoroutine(Exploding());
-            uiBar.DestroyUIbar();
+            StartCoroutine(Exploding()); //Delay para Explosão
+            uiBar.BarLife(0); // Atualização do Status da Barra de HP
         }
     }
     IEnumerator Exploding()
     {
+        //Animações de Explosão
         animator.SetTrigger("Desappear");
         fxExplosion.SetActive(true);
+
         yield return new WaitForSeconds(2f);
-        controller.DecreaseBall();
+
+        //Função Boys
+        int boys = Random.Range(1, 3);
+        if (boys == 2 && parent == "Father")
+        {
+            print("Swpam boys");
+            Instantiate(boysPrefab, transform.position, transform.rotation);
+            Instantiate(boysPrefab, transform.position, transform.rotation);
+            controller.numBall += 2;
+        }
+        controller.DecreaseBall(); //Diminuindo a quantidade de Bolas no Controller
         Destroy(gameObject);
     }
 

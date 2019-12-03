@@ -1,16 +1,17 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class Controller : MonoBehaviour
 {
+    //Prefab Bolas
     public GameObject[] balls;
-
+    //Tamanho da Tela 
     public static Vector2 bottomLeft;
     public static Vector2 topRight;
-
+    //Quantidade de Bolas na Tela
     public int numBall;
-
     //Canvas
     public GameObject uiEnd;
 
@@ -30,16 +31,20 @@ public class Controller : MonoBehaviour
             Instantiate(balls[i]);
         }
     }
-
+    //Contagem da quantidade de Bolas na Tela
     public void DecreaseBall()
     {
-        print("Ball out -1");
         numBall = numBall - 1;
         if (numBall <= 0)
         {
             print("Fim da Aplcação");
             uiEnd.SetActive(true);
         }
+    }
+    //Botão para Reiniciar
+    public void Restart()
+    {
+        SceneManager.LoadScene("SampleScene");
     }
 }
 
