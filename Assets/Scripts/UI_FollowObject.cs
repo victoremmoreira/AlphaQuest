@@ -48,7 +48,7 @@ public class UI_FollowObject : MonoBehaviour
     }
     IEnumerator SendDestroy()
     {
-        yield return new WaitForSeconds(1f);
+        yield return new WaitForSeconds(2f);
         bar.GetComponent<BarLifeDestroy>().DestroyUIbarA();
         barON = false; 
     }
